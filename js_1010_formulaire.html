@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='UTF-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+	<meta http-equiv='X-UA-Compatible' content='ie=edge'>
+	<link rel='stylesheet' href='///C:\Users\Administrateur\Desktop\library\basic-print.css'/>
+	<link rel='stylesheet' href='///C:\Users\Administrateur\Desktop\library\basic-screen.css'/>
+	<script type='text/javascript' src='///C:\Users\Administrateur\Desktop\library\func-divers.js'></script>
+	<style type='text/css'>
+		div.hidden { display: none; }
+	</style>
+	<title>exercices sur les formulaire</title>
+</head>
+<body>
+	<div id='actions' class='row'>
+		<button>ajouter une personne</button>
+		<button>modifier une personne</button>
+		<button>supprimer une personne</button>
+		<button>vider la liste des personnes</button>
+		<button>voir la liste des personnes</button>
+		<p>nombre de personnes: </p>
+	</div>
+	<div class='hidden' id='add'>
+		<span>nouveau nom</span><input type='text'><button>enregistrer</button>
+	</div>
+	<div class='hidden' id='change'>
+		<p><span>choisisser une personne</span><select></select></p>
+		<p><span>nouveau nom</span><input type='text'></p>
+		<button>enregistrer</button>
+	</div>
+	<div class='hidden' id='del'>
+		<p><span>choisisser une personne</span><select></select></p>
+		<button>supprimer</button>
+	</div>
+	<div class='hidden' id='show'></div>
+</body>
+<script>
+	let nameList =[];
+	let divList = document.querySelectorAll ('div');
+	let buttonList = document.querySelectorAll ('button');
+	let inputList = document.querySelectorAll ('input');
+	let selectList = document.querySelectorAll ('select');
+	let nbPerson = document.querySelector ('p');
+
+	fillNameList();
+	// les premiers boutons permettent de choisir une action
+	buttonList[0].addEventListener ('click', choiceAdd);
+	buttonList[1].addEventListener ('click', choiceChange);
+	buttonList[2].addEventListener ('click', choiceDel);
+	buttonList[3].addEventListener ('click', choiceEmpty);
+	buttonList[4].addEventListener ('click', choiceShow);
+	// les boutons suivants valident nos décisions
+	buttonList[5].addEventListener ('click', actionAdd);
+	buttonList[6].addEventListener ('click', actionChange);
+	buttonList[7].addEventListener ('click', actionDel);
+	// choix d'action
+	function choiceAdd(){
+		for (let i=1; i< divList.length; i++) divList[i].style.display = 'none';
+		divList[1].style.display = 'block';
+	}
+	function choiceChange(){
+		for (let i=1; i< divList.length; i++) divList[i].style.display = 'none';
+		divList[2].style.display = 'block';
+	}
+	function choiceDel(){
+		for (let i=1; i< divList.length; i++) divList[i].style.display = 'none';
+		divList[3].style.display = 'block';
+	}
+	function choiceEmpty(){
+		for (let i=1; i< divList.length; i++) divList[i].style.display = 'none';
+		// vider la liste
+		nameList =[];
+		nbPerson.textContent = 'nombre de personnes '+ nameList.length;
+		// vider les selects
+		let optionList = selectList[0].querySelectorAll ('option');
+		optionList.forEach (function (option){
+			selectList[0].removeChild (option); });
+		optionList = selectList[1].querySelectorAll ('option');
+		optionList.forEach (function (option){
+			selectList[1].removeChild (option); });
+		choiceShow();
+	}
+	function choiceShow(){
+		for (let i=1; i< divList.length; i++) divList[i].style.display = 'none';
+		divList[4].style.display = 'block';
+		divList[4].textContent = nameList.join (', ');
+	}
+	// validation de décision
+	function actionAdd(){
+		let name = inputList[0].value;
+		nameList.push (name);
+		let option1 = createOption (name);
+		let option2 = createOption (name);
+		selectList[0].appendChild (option1);
+		selectList[1].appendChild (option2);
+		nbPerson.textContent = 'nombre de personnes '+ nameList.length;
+		choiceShow();
+	}
+	function actionChange(){
+		// récupérer l'ancien nom
+		let optionList = selectList[0].querySelectorAll ('option');
+		let namePos =-1;
+		for (let i=0; i< optionList.length; i++){
+			if (optionList[i].selected == true){
+				namePos =i;
+				break;
+			}
+		}
+		// récupérer le nouveau nom
+		let nameNew = inputList[1].value;
+		// changer le nom dans la liste
+		nameList [namePos] = nameNew;
+		// remplacer le nom dans les selects
+		let option1 = createOption (nameNew);
+		let option2 = createOption (nameNew);
+		selectList[0].replaceChild (option1, optionList [namePos]);
+		optionList = selectList[1].querySelectorAll ('option');
+		selectList[1].replaceChild (option2, optionList [namePos]);
+		choiceShow();
+	}
+	function actionDel(){
+		// récupérer l'ancien nom
+		let optionList = selectList[1].querySelectorAll ('option');
+		let namePos =-1;
+		for (let i=0; i< optionList.length; i++){
+			if (optionList[i].selected == true){
+				namePos =i;
+				break;
+			}
+		}
+		// supprimer le nom dans la liste
+		nameList.splice (namePos, 1);
+		nbPerson.textContent = 'nombre de personnes '+ nameList.length;
+		// supprimer le nom dans les select
+		selectList[1].removeChild (optionList [namePos]);
+		optionList = selectList[0].querySelectorAll ('option');
+		selectList[0].removeChild (optionList [namePos]);
+		choiceShow();
+	}
+	// fonctions auxilliaires
+	function fillNameList(){
+		let tmpNameList =[ 'Deborah', 'Thierry', 'Anne', 'Wendy', 'Andy' ];
+		for (let i=0; i< tmpNameList.length; i++){
+			inputList[0].value = tmpNameList[i];
+			actionAdd();
+		}
+	}
+	function createOption (name){
+		let option = document.createElement ('option');
+		option.textContent = name;
+		option.value = name;
+		return option;
+	}
+</script>
+</html>

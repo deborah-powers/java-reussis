@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"> 
+
+<h:head>
+	<title>Modifier un livre</title>
+</h:head> 
+<body>
+	<h1>Coucou je suis la page de modification</h1>
+	<p>Titre: <h:outputText value="#{library.bookHandled.title}" /></p>
+	<p>Identifiant: <h:outputText value="#{library.bookHandled.id}" /></p>
+	<h:form>
+		<p>
+			<span>Titre</span>
+			<h:inputText value="#{library.bookHandled.title}"/>
+		</p>
+		<p>
+			<span>Auteur</span>
+			<h:inputText value="#{library.bookHandled.author}"/>
+		</p>
+		<h:commandButton action="#{library.updateOrCreate()}" value="Modifier" />
+	</h:form>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Liste des livres</title>
+</h:head>
+<body>
+	<h:form>
+		<h:commandButton action="#{library.createPrep()}" value="Créer" />
+	</h:form>
+	<h1><h:outputText value="Il n'y a pas de livres" rendered="#{library.emptyList()}" /></h1>
+	<h:form rendered="#{library.emptyList()==false}">
+		<h1>Les livres</h1>
+		<h:dataTable value="#{library.toArray()}" var="book">
+			<h:column>
+				<f:facet name="header">Identifiant</f:facet>
+				<h:outputText value="#{book.id}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Titre</f:facet>
+				<h:outputText value="#{book.title}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Auteur</f:facet>
+				<h:outputText value="#{book.author}" />
+			</h:column>
+			<h:column>
+				<h:commandButton action="#{library.delete(book)}" value="Supprimer" />
+			</h:column>
+			<h:column>
+				<h:commandButton action="#{library.updatePrep(book)}" value="Modifier" />
+			</h:column>
+		</h:dataTable>
+	</h:form>
+</body>
+</html>
